@@ -21,10 +21,10 @@ function App() {
   //-------------------------------------//
 
   // Endpoint for getting location
-  const locationNameUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${cityInput},${stateInput},US&limit=5&appid=${process.env.REACT_APP_OPEN_WEATHER}`;
+  const locationNameUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${cityInput},${stateInput},US&limit=5&appid=${process.env.REACT_APP_OPEN_WEATHER}`;
 
   // Endpoint for getting weather data
-  const forecastUrl = `http://api.weatherapi.com/v1/forecast.json?key=${process.env.REACT_APP_WEATHER}&q=${location.lat},${location.lon}&days=3&aqi=no&alerts=no`;
+  const forecastUrl = `https://api.weatherapi.com/v1/forecast.json?key=${process.env.REACT_APP_WEATHER}&q=${location.lat},${location.lon}&days=3&aqi=no&alerts=no`;
 
   //-------------------------------------//
   // FORM INPUT CHANGE HANDLER           //
