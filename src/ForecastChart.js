@@ -1,9 +1,10 @@
 import React from "react";
 import { Line } from "react-chartjs-2";
 import { Chart, registerables } from "chart.js";
+import styled from "styled-components";
 Chart.register(...registerables);
 
-const Forecast = ({ weatherForecast }) => {
+const ForecastChart = ({ weatherForecast }) => {
   const hourlyTempData = [
     ...weatherForecast[0].hourlyTemp,
     ...weatherForecast[1].hourlyTemp,
@@ -21,11 +22,12 @@ const Forecast = ({ weatherForecast }) => {
   };
 
   return (
-    <>
+    <Wrapper>
       <h1>chart</h1>
-      <Line data={hourlyData} />
-    </>
+      <Line data={hourlyData} className="chart" />
+    </Wrapper>
   );
 };
+const Wrapper = styled.div``;
 
-export default Forecast;
+export default ForecastChart;

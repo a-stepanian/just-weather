@@ -1,17 +1,21 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import CurrentWeather from "./CurrentWeather";
-import Forecast from "./Forecast";
+import ForecastChart from "./ForecastChart";
 import Navbar from "./Navbar";
+import Location from "./Location";
 
 function App() {
+  const [isLightMode, setIsLightMode] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [cityInput, setCityInput] = useState("Port Angeles");
   const [stateInput, setStateInput] = useState("WA");
   const [location, setLocation] = useState({
-    lat: 48.12,
-    lon: 123.43,
-    name: "Port Angeles",
-    state: "Washington",
+    // lat: 48.12,
+    // lon: 123.43,
+    // name: "Port Angeles",
+    // state: "Washington",
+    // stateCode: "WA",
   });
   const [currentConditions, setCurrentConditions] = useState({});
   const [weatherForecast, setWeatherForecast] = useState([]);
@@ -60,7 +64,8 @@ function App() {
         );
       } else {
         const { lat, lon, name, state } = data[0];
-        await setLocation({ lat, lon, name, state });
+        const stateCode = stateInput.toUpperCase();
+        await setLocation({ lat, lon, name, state, stateCode });
       }
     } catch (e) {
       console.log(e);
@@ -147,7 +152,8 @@ function App() {
             hourlyTemp,
           });
         }
-        setWeatherForecast(forecast);
+        await setWeatherForecast(forecast);
+        setIsLoading(false);
       }
     } catch (e) {
       console.log(e);
@@ -181,13 +187,24 @@ function App() {
   }, [location.lat]);
 
   return (
-    <Wrapper>
+    <Wrapper className={`${isLightMode ? "light-mode" : "dark-mode"}`}>
       <Navbar
         handleChange={handleChange}
         handleSubmit={handleSubmit}
         location={location}
+        isLightMode={isLightMode}
+        setIsLightMode={setIsLightMode}
       />
-      {weatherForecast[0] && (
+      {!isLoading && (
+        <Location
+          location={location}
+          temp={currentConditions.temp_f}
+          icon={currentConditions.icon}
+          text={currentConditions.text}
+        />
+      )}
+
+      {!isLoading && (
         <>
           <CurrentWeather
             currentConditions={currentConditions}
@@ -197,8 +214,10 @@ function App() {
               min: weatherForecast[0].mintemp_f,
             }}
           />
-          <div className="chart">
-            <Forecast weatherForecast={weatherForecast} />
+          <div className="chart-wrapper">
+            <div className="chart">
+              <ForecastChart weatherForecast={weatherForecast} />
+            </div>
           </div>
         </>
       )}
@@ -210,9 +229,14 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-
+  background-color: var(--background);
+  transition: background-color 0.4s;
+  .chart-wrapper {
+    width: 18rem;
+    overflow-x: scroll;
+  }
   .chart {
-    width: 100%;
+    width: 36rem;
   }
 `;
 

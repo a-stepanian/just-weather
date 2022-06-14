@@ -11,3 +11,18 @@ body {
   padding: 0;
   box-sizing: border-box;
 }
+
+.light-mode {
+  --background: rgb(233, 252, 255);
+  --navbar: rgb(196, 247, 255);
+  --text: rgb(14, 30, 33);
+  --main: rgb(66, 150, 163);
+}
+
+
+.dark-mode {
+  --background: rgb(14, 30, 33);
+  --navbar: rgb(77, 228, 255);
+  --text: rgb(233, 252, 255);
+  --main: rgb(0, 221, 255);
+}
