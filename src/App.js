@@ -1,4 +1,7 @@
 import { useEffect, useState } from "react";
+import styled from "styled-components";
+import CurrentWeather from "./CurrentWeather";
+import Navbar from "./Navbar";
 
 function App() {
   const [cityInput, setCityInput] = useState("Atlanta");
@@ -19,10 +22,7 @@ function App() {
   // Endpoint for getting location
   const locationNameUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${cityInput},${stateInput},US&limit=5&appid=${process.env.REACT_APP_OPEN_WEATHER}`;
 
-  // Endpoint for getting current weather
-  const currentWeatherUrl = `http://api.weatherapi.com/v1/current.json?key=${process.env.REACT_APP_WEATHER}&q=${location.lat},${location.lon}&aqi=no`;
-
-  // Endpoint for getting forecast
+  // Endpoint for getting weather data
   const forecastUrl = `http://api.weatherapi.com/v1/forecast.json?key=${process.env.REACT_APP_WEATHER}&q=${location.lat},${location.lon}&days=3&aqi=no&alerts=no`;
 
   //-------------------------------------//
@@ -168,25 +168,32 @@ function App() {
   //--------------------------------------//
 
   useEffect(() => {
-    console.log("fetching weather data!");
     fetchWeatherData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.lat]);
 
+  console.log(weatherForecast[0]);
   return (
-    <>
-      <form onSubmit={(e) => handleSubmit(e)}>
-        <label htmlFor="location">Location: </label>
-        <input
-          type="text"
-          name="location"
-          id="location"
-          onChange={(e) => handleChange(e)}
+    <Wrapper>
+      <Navbar handleChange={handleChange} handleSubmit={handleSubmit} />
+      {weatherForecast[0] && (
+        <CurrentWeather
+          currentConditions={currentConditions}
+          location={location}
+          temps={{
+            max: weatherForecast[0].maxtemp_f,
+            min: weatherForecast[0].mintemp_f,
+          }}
         />
-        <button type="submit">Go</button>
-      </form>
-      <p>example: Austin, TX</p>
-    </>
+      )}
+    </Wrapper>
   );
 }
+
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
 
 export default App;
