@@ -1,16 +1,17 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import CurrentWeather from "./CurrentWeather";
+import Forecast from "./Forecast";
 import Navbar from "./Navbar";
 
 function App() {
-  const [cityInput, setCityInput] = useState("Atlanta");
-  const [stateInput, setStateInput] = useState("GA");
+  const [cityInput, setCityInput] = useState("Port Angeles");
+  const [stateInput, setStateInput] = useState("WA");
   const [location, setLocation] = useState({
-    lat: 33.75,
-    lon: -84.39,
-    name: "Atlanta",
-    state: "Georgia",
+    lat: 48.12,
+    lon: 123.43,
+    name: "Port Angeles",
+    state: "Washington",
   });
   const [currentConditions, setCurrentConditions] = useState({});
   const [weatherForecast, setWeatherForecast] = useState([]);
@@ -123,7 +124,9 @@ function App() {
           const hourlyTemp = [];
           for (let hour of day.hour) {
             const { time, temp_f } = hour;
-            hourlyTemp.push({ time, temp_f });
+            const index = time.indexOf(" ");
+            const justTime = time.slice(index, time.length);
+            hourlyTemp.push({ time: justTime, temp_f });
           }
           forecast.push({
             date,
@@ -168,23 +171,36 @@ function App() {
   //--------------------------------------//
 
   useEffect(() => {
-    fetchWeatherData();
+    const fetchAll = async () => {
+      await fetchLocation();
+      await fetchWeatherData();
+    };
+
+    fetchAll();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.lat]);
 
-  console.log(weatherForecast[0]);
   return (
     <Wrapper>
-      <Navbar handleChange={handleChange} handleSubmit={handleSubmit} />
+      <Navbar
+        handleChange={handleChange}
+        handleSubmit={handleSubmit}
+        location={location}
+      />
       {weatherForecast[0] && (
-        <CurrentWeather
-          currentConditions={currentConditions}
-          location={location}
-          temps={{
-            max: weatherForecast[0].maxtemp_f,
-            min: weatherForecast[0].mintemp_f,
-          }}
-        />
+        <>
+          <CurrentWeather
+            currentConditions={currentConditions}
+            location={location}
+            temps={{
+              max: weatherForecast[0].maxtemp_f,
+              min: weatherForecast[0].mintemp_f,
+            }}
+          />
+          <div className="chart">
+            <Forecast weatherForecast={weatherForecast} />
+          </div>
+        </>
       )}
     </Wrapper>
   );
@@ -194,6 +210,10 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  .chart {
+    width: 100%;
+  }
 `;
 
 export default App;

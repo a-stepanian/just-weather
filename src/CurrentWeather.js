@@ -20,7 +20,6 @@ const CurrentWeather = ({
     // wind_mph,
   } = currentConditions;
   const { name: city, state } = location;
-  console.log(currentConditions);
   return (
     <Wrapper>
       <p>

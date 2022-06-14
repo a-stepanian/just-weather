@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-const Navbar = ({ handleChange, handleSubmit }) => {
+const Navbar = ({ handleChange, handleSubmit, location }) => {
   return (
     <Wrapper>
       <h1>just weather</h1>
@@ -20,11 +20,11 @@ const Navbar = ({ handleChange, handleSubmit }) => {
 };
 
 const Wrapper = styled.div`
+  position: relative;
   width: 18rem;
   margin-top: 0.5rem;
   padding: 0.1rem 0.2rem;
-  border-radius: 1rem;
-  box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.5);
+  border: 3px solid black;
   display: flex;
   justify-content: space-between;
   align-items: center;
