@@ -3,9 +3,12 @@ import styled from "styled-components";
 import CurrentWeather from "./CurrentWeather";
 import Navbar from "./Navbar";
 import Location from "./Location";
+import HourlyForecast from "./HourlyForecast";
 
 function App() {
-  const [isLightMode, setIsLightMode] = useState(true);
+  // used to prevent first weather fetching useEffect from running on first render
+  const [isFirstRender, setIsFirstRender] = useState(true);
+  const [isLightMode, setIsLightMode] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [cityInput, setCityInput] = useState("Port Angeles");
   const [stateInput, setStateInput] = useState("WA");
@@ -13,42 +16,12 @@ function App() {
   const [currentConditions, setCurrentConditions] = useState({});
   const [weatherForecast, setWeatherForecast] = useState([]);
 
-  //-------------------------------------//
-  // API ENDPOINTS                       //
-  //-------------------------------------//
-
-  // Endpoint for getting location
-  const locationNameUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${cityInput},${stateInput},US&limit=5&appid=${process.env.REACT_APP_OPEN_WEATHER}`;
-
-  // Endpoint for getting weather data
-  const forecastUrl = `https://api.weatherapi.com/v1/forecast.json?key=${process.env.REACT_APP_WEATHER}&q=${location.lat},${location.lon}&days=3&aqi=no&alerts=no`;
-
-  //-------------------------------------//
-  // FORM INPUT CHANGE HANDLER           //
-  //-------------------------------------//
-
-  // Set the stateInput and cityInput state values from the single input element.
-  const handleChange = (e) => {
-    if (e.target.value.includes(",")) {
-      const index = e.target.value.indexOf(",");
-      setStateInput(
-        e.target.value.slice(index + 1, e.target.value.length).trim()
-      );
-      setCityInput(e.target.value.slice(0, index));
-    } else {
-      setCityInput(e.target.value);
-    }
-  };
-
-  //-------------------------------------//
-  // Functions to fetch data from APIs   //
-  //-------------------------------------//
-
   const fetchLocation = async () => {
     try {
-      const response = await fetch(locationNameUrl);
+      const response = await fetch(
+        `https://api.openweathermap.org/geo/1.0/direct?q=${cityInput},${stateInput},US&limit=5&appid=${process.env.REACT_APP_OPEN_WEATHER}`
+      );
       const data = await response.json();
-      // if no location is found throw error, otherwise, set the location from the first element in the data array (sometimes there is more than one element matching the specific city/state but with slightly different latitude and longitude coordinates, so just using the first one).
       if (!data[0]) {
         throw new Error(
           `Error with location.  Did not find locations matching ${cityInput}${
@@ -58,7 +31,7 @@ function App() {
       } else {
         const { lat, lon, name, state } = data[0];
         const stateCode = stateInput.toUpperCase();
-        await setLocation({ lat, lon, name, state, stateCode });
+        setLocation({ lat, lon, name, state, stateCode });
       }
     } catch (e) {
       console.log(e);
@@ -67,7 +40,9 @@ function App() {
 
   const fetchWeatherData = async () => {
     try {
-      const response = await fetch(forecastUrl);
+      const response = await fetch(
+        `https://api.weatherapi.com/v1/forecast.json?key=${process.env.REACT_APP_WEATHER}&q=${location.lat},${location.lon}&days=3&aqi=no&alerts=no`
+      );
       const data = await response.json();
       if (!data.location.name) {
         throw new Error("Error with current weather.");
@@ -121,10 +96,18 @@ function App() {
           const { text, icon } = day.day.condition;
           const hourlyTemp = [];
           for (let hour of day.hour) {
-            const { time, temp_f } = hour;
+            const { time, temp_f, chance_of_rain, chance_of_snow } = hour;
+            const { icon, text } = hour.condition;
             const index = time.indexOf(" ");
             const justTime = time.slice(index, time.length);
-            hourlyTemp.push({ time: justTime, temp_f });
+            hourlyTemp.push({
+              time: justTime,
+              temp_f,
+              chance_of_rain,
+              chance_of_snow,
+              icon,
+              text,
+            });
           }
           forecast.push({
             date,
@@ -145,7 +128,7 @@ function App() {
             hourlyTemp,
           });
         }
-        await setWeatherForecast(forecast);
+        setWeatherForecast(forecast);
         setIsLoading(false);
       }
     } catch (e) {
@@ -153,31 +136,39 @@ function App() {
     }
   };
 
-  //--------------------------------------//
-  // FORM SUBMISSION HANDLER TO           //
-  // TRIGGER LOCATION FETCH               //
-  //--------------------------------------//
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    fetchLocation();
-    // after fetching the location and updating the location state, the useEffect below will be triggered to fetch the weather data.
+  // handle form input change event
+  const handleChange = (e) => {
+    if (e.target.value.includes(",")) {
+      const index = e.target.value.indexOf(",");
+      setStateInput(
+        e.target.value.slice(index + 1, e.target.value.length).trim()
+      );
+      setCityInput(e.target.value.slice(0, index));
+    } else {
+      setCityInput(e.target.value);
+    }
   };
 
-  //--------------------------------------//
-  // TRIGGER WEATHER FETCH INITIALLY/WHEN //
-  // LOCATION HAS BEEN UPDATED            //
-  //--------------------------------------//
+  // handle form submission event
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    await fetchLocation();
+    await fetchWeatherData();
+  };
 
   useEffect(() => {
-    const fetchAll = async () => {
-      await fetchLocation();
-      await fetchWeatherData();
-    };
-
-    fetchAll();
+    fetchLocation();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location.lat]);
+  }, []);
+
+  useEffect(() => {
+    if (!isFirstRender) {
+      fetchWeatherData();
+    } else {
+      setIsFirstRender(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location]);
 
   return (
     <Wrapper className={`${isLightMode ? "light-mode" : "dark-mode"}`}>
@@ -188,6 +179,7 @@ function App() {
         isLightMode={isLightMode}
         setIsLightMode={setIsLightMode}
       />
+      {isLoading && <h1>LOADING.....................</h1>}
       {!isLoading && (
         <Location
           location={location}
@@ -207,6 +199,7 @@ function App() {
               min: weatherForecast[0].mintemp_f,
             }}
           />
+          <HourlyForecast weatherForecast={weatherForecast} />
         </>
       )}
     </Wrapper>
