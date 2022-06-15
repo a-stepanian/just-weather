@@ -13,7 +13,8 @@ const Navbar = ({
   return (
     <Wrapper>
       <h1>
-        just <br /> weather
+        just the
+        <br /> weather
       </h1>
       <form onSubmit={(e) => handleSubmit(e)}>
         <label htmlFor="location"></label>
@@ -52,8 +53,7 @@ const Wrapper = styled.div`
     padding-left: 0.5rem;
     font-size: 0.8rem;
     white-space: nowrap;
-    font-family: "Baloo 2", cursive;
-    line-height: 0.6rem;
+    line-height: 0.8rem;
   }
   form {
     position: relative;
@@ -61,10 +61,10 @@ const Wrapper = styled.div`
     align-items: center;
     input {
       width: 10rem;
-      height: 2.4rem;
-      padding: 0.1rem 0.5rem;
-      border-radius: 1.2rem;
-      border: 0.1rem solid rgba(0, 0, 0, 0.1);
+      height: 2rem;
+      background-color: transparent;
+      border: none;
+      border-bottom: 0.1rem solid var(--main);
     }
     .search-btn {
       position: absolute;
@@ -82,6 +82,9 @@ const Wrapper = styled.div`
     border: 0.1rem solid rgba(0, 0, 0, 0.1);
     display: flex;
     justify-content: space-between;
+    &:hover {
+      cursor: pointer;
+    }
     .slider {
       position: absolute;
       top: 0;

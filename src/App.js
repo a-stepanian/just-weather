@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import CurrentWeather from "./CurrentWeather";
 import Navbar from "./Navbar";
-import Location from "./Location";
 import HourlyForecast from "./HourlyForecast";
 
 function App() {
@@ -168,7 +167,7 @@ function App() {
       setIsFirstRender(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location]);
+  }, [location.name]);
 
   return (
     <Wrapper className={`${isLightMode ? "light-mode" : "dark-mode"}`}>
@@ -180,14 +179,6 @@ function App() {
         setIsLightMode={setIsLightMode}
       />
       {isLoading && <h1>LOADING.....................</h1>}
-      {!isLoading && (
-        <Location
-          location={location}
-          temp={currentConditions.temp_f}
-          icon={currentConditions.icon}
-          text={currentConditions.text}
-        />
-      )}
 
       {!isLoading && (
         <>
@@ -211,7 +202,7 @@ const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
   background-color: var(--background);
-  transition: background-color 0.4s;
+  transition: 0.5s;
 `;
 
 export default App;

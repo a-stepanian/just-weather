@@ -4,32 +4,39 @@ import styled from "styled-components";
 const HourlyForecast = ({ weatherForecast }) => {
   const currentTime = new Date().getHours();
 
+  const formatTime = (time) => {
+    // Make formattedTime variable 12hr am/pm format
+    if (time > 0 && time < 12) {
+      return time.toString() + "am";
+    } else if (time > 12 && time < 25) {
+      return (time - 12).toString() + "pm";
+    } else if (time === 12) {
+      return "12pm";
+    } else {
+      return "12am";
+    }
+  };
+
   const hourlyWeather = [];
   for (let i = 0; i < weatherForecast.length; i++) {
     for (let j = 0; j < weatherForecast[i].hourlyTemp.length; j++) {
       // Start hourlyWeather array at current time
       if (i > 0 || (i === 0 && j >= currentTime)) {
+        // parse time to 2 digit integer
         const time = parseInt(
           weatherForecast[i].hourlyTemp[j].time.slice(0, 3),
           10
         );
-        // Make formattedTime variable 12hr am/pm format
-        let formattedTime = "";
-        if (time > 0 && time < 12) {
-          formattedTime = time.toString() + "AM";
-        } else if (time > 12 && time < 25) {
-          formattedTime = (time - 12).toString() + "PM";
-        } else if (time === 12) {
-          formattedTime = "12PM";
-        } else {
-          formattedTime = "12AM";
-        }
-        console.log(time);
-        console.log(formattedTime);
+        let formattedTime = formatTime(time);
+
+        // remove decimal from temperatures
+        const formattedTemp =
+          weatherForecast[i].hourlyTemp[j].temp_f.toFixed(0);
 
         hourlyWeather.push({
           ...weatherForecast[i].hourlyTemp[j],
           formattedTime,
+          formattedTemp,
         });
       }
     }
@@ -37,22 +44,17 @@ const HourlyForecast = ({ weatherForecast }) => {
 
   return (
     <Wrapper>
-      {hourlyWeather.map((hour) => {
-        const {
-          formattedTime,
-          temp_f,
-          chance_of_rain,
-          chance_of_snow,
-          icon,
-          text,
-        } = hour;
+      {hourlyWeather.map((hour, index) => {
+        const { formattedTime, chance_of_rain, icon, text, formattedTemp } =
+          hour;
         return (
-          <article>
+          <article key={index}>
             <p>{formattedTime}</p>
-            <p>{temp_f}</p>
+            <p>{formattedTemp}&#176;F</p>
             <p>{chance_of_rain}%</p>
-            <p>{chance_of_snow}%</p>
-            <img src={icon} alt={text} />
+            <div className="img-wrapper">
+              <img src={icon} alt={text} />
+            </div>
           </article>
         );
       })}
@@ -62,10 +64,25 @@ const HourlyForecast = ({ weatherForecast }) => {
 
 const Wrapper = styled.div`
   article {
+    margin: 1.4rem 0;
+    background-color: var(--hourly);
     width: 18rem;
-    height: 1rem;
+    height: 1.4rem;
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    p {
+      width: 3.8rem;
+      text-align: end;
+    }
+    .img-wrapper {
+      width: 3.8rem;
+      height: 200%;
+      text-align: end;
+      img {
+        height: 100%;
+      }
+    }
   }
 `;
 
