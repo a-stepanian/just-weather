@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import CurrentWeather from "./CurrentWeather";
-import ForecastChart from "./ForecastChart";
 import Navbar from "./Navbar";
 import Location from "./Location";
 
@@ -10,13 +9,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [cityInput, setCityInput] = useState("Port Angeles");
   const [stateInput, setStateInput] = useState("WA");
-  const [location, setLocation] = useState({
-    // lat: 48.12,
-    // lon: 123.43,
-    // name: "Port Angeles",
-    // state: "Washington",
-    // stateCode: "WA",
-  });
+  const [location, setLocation] = useState({});
   const [currentConditions, setCurrentConditions] = useState({});
   const [weatherForecast, setWeatherForecast] = useState([]);
 
@@ -214,11 +207,6 @@ function App() {
               min: weatherForecast[0].mintemp_f,
             }}
           />
-          <div className="chart-wrapper">
-            <div className="chart">
-              <ForecastChart weatherForecast={weatherForecast} />
-            </div>
-          </div>
         </>
       )}
     </Wrapper>
@@ -231,13 +219,6 @@ const Wrapper = styled.div`
   align-items: center;
   background-color: var(--background);
   transition: background-color 0.4s;
-  .chart-wrapper {
-    width: 18rem;
-    overflow-x: scroll;
-  }
-  .chart {
-    width: 36rem;
-  }
 `;
 
 export default App;
