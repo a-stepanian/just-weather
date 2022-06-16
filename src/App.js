@@ -167,7 +167,7 @@ function App() {
       setIsFirstRender(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location.name]);
+  }, [location.name, location.state]);
 
   return (
     <Wrapper className={`${isLightMode ? "light-mode" : "dark-mode"}`}>
