@@ -65,6 +65,8 @@ const Wrapper = styled.div`
     display: flex;
     align-items: center;
     input {
+      font-size: 16px;
+      padding-left: 0.2rem;
       -webkit-appearance: none;
       -moz-appearance: none;
       appearance: none;
@@ -75,6 +77,9 @@ const Wrapper = styled.div`
       border-radius: 0;
       border-bottom: 0.1rem solid var(--text);
       background-color: transparent;
+      &:focus {
+        outline: none;
+      }
     }
     .search-btn {
       position: absolute;
@@ -86,7 +91,7 @@ const Wrapper = styled.div`
   .darkmode-btn {
     padding-rightt: 0.5rem;
     position: relative;
-    width: 3.4rem;
+    width: 3.3rem;
     height: 2.6rem;
     background-color: transparent;
     border: none;
