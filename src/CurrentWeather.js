@@ -8,12 +8,15 @@ const CurrentWeather = ({ location, currentConditions, temps }) => {
   const max = temps.max.toFixed(0);
   return (
     <Wrapper>
-      <h2>{location.name}</h2>
-      <p className="currently">
-        <span className="current-temp">
-          {temp}&#176;<span className="f">F</span>
-        </span>
-      </p>
+      <header className="location-temp">
+        <h2>{location.name}</h2>
+        <p className="currently">
+          <span className="current-temp">
+            {temp}&#176;<span className="f">F</span>
+          </span>
+        </p>
+      </header>
+
       <div className="conditions-wrapper">
         <div className="icon-and-description">
           <img src={icon} alt={text} />
@@ -21,10 +24,10 @@ const CurrentWeather = ({ location, currentConditions, temps }) => {
         </div>
         <div className="low-high-temps-wrapper">
           <div className="low-high-temp">
-            <p className="lo">Lo:</p> <p>{min}&#176;F</p>
+            <p className="hi">Hi:</p> <span>{max}&#176;F</span>
           </div>
           <div className="low-high-temp">
-            <p className="hi">Hi:</p> <span>{max}&#176;F</span>
+            <p className="lo">Lo:</p> <p>{min}&#176;F</p>
           </div>
         </div>
       </div>
@@ -33,11 +36,17 @@ const CurrentWeather = ({ location, currentConditions, temps }) => {
 };
 
 const Wrapper = styled.div`
+  position: relative;
   width: 18rem;
   padding: 1rem;
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  .location-temp {
+    margin-top: 2rem;
+    height: 6rem;
+  }
 
   h2 {
     text-shadow: 1px 2px 1px var(--shadow);
@@ -60,18 +69,25 @@ const Wrapper = styled.div`
   }
 
   .icon-and-description {
-    padding: 1.5rem 0.5rem;
-    border-radius: 0.3rem;
+    z-index: 1;
+    position: absolute;
+    right: 0;
+    top: 11rem;
+    height: 9rem;
+    width: 9rem;
+    border-radius: var(--tile-radius);
     background-color: var(--glass);
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     width: 11rem;
-    box-shadow: 1px 2px 2px var(--shadow);
-
-    img {
+    box-shadow: var(--current-cond-shadow);
+    transition: border-radius 0.2s, background-color 0.4s, box-shadow 0.4s;
+    0.4 img {
       transform: scale(1.2);
-      filter: drop-shadow(1px 3px 1px var(--shadow));
+      transition: filter 0.4s;
+      filter: drop-shadow(1px 3px 1px var(--background));
     }
     p {
       font-size: 1.2rem;
@@ -80,15 +96,26 @@ const Wrapper = styled.div`
   }
 
   .low-high-temps-wrapper {
+    margin: 2rem 0 4rem;
     display: flex;
     flex-direction: column;
     justify-content: center;
     .low-high-temp {
-      padding: 0.5rem 0;
+      padding: var(--padding);
       text-shadow: 1px 2px 2px var(--shadow);
-      width: 6rem;
       display: flex;
       justify-content: space-between;
+      box-shadow: var(--current-temp-shadow);
+      transition: background-color 0.4s, transform 0.4s, padding 0.4s,
+        box-shadow 1s;
+      transform: var(--skew);
+      &:nth-of-type(1) {
+        background-color: var(--hot);
+        margin: 0.5rem 0;
+      }
+      &:nth-of-type(2) {
+        background-color: var(--cold);
+      }
       .lo,
       .hi {
         width: 2rem;

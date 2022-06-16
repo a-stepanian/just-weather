@@ -198,11 +198,12 @@ function App() {
 }
 
 const Wrapper = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   background-color: var(--background);
-  transition: 0.5s;
+  transition: background-color 0.5s;
 `;
 
 export default App;

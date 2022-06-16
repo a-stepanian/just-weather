@@ -11,24 +11,42 @@ body {
 }
 
 .light-mode {
-font-family: 'Goldman', cursive;
-  --background: rgb(250, 255, 233);
+  font-family: 'Goldman', cursive;
+  --background: rgb(238, 194, 93);
   --navbar: rgb(196, 247, 255);
-  --text: rgb(14, 30, 33);
+  --text: rgb(54, 66, 44);
   --main: rgb(66, 150, 163);
   --shadow: rgba(66, 150, 163, 0);
   --hourly: rgba(69, 129, 139, 0.15);
-  --glass: rgba(179, 206, 161, 0.134);
+
+  /*current temps*/
+  --glass: rgb(148, 117, 85);
+  --tile-radius: 50%;
+  --cold: rgb(120, 186, 172);
+  --hot: rgb(191, 89, 55);
+  --skew: skew(-15deg);
+  --padding: 0.5rem 13rem 0.5rem 1rem;
+  --current-temp-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
+  --current-cond-shadow: 5px 5px 5px rgba(0, 0, 0, 0.2);
 }
 
 
 .dark-mode {
-    font-family: 'Orbitron', sans-serif;
+  font-family: 'Orbitron', sans-serif;
   --background: rgb(14, 30, 33);
   --navbar: rgb(77, 228, 255);
   --text: rgb(233, 252, 255);
   --main: rgb(0, 221, 255);
   --shadow: rgba(66, 150, 163, 1);
   --hourly: rgba(69, 129, 139, 0.3);
-  --glass: rgba(226, 251, 255, 0.7);
+  
+  /*current temps*/
+  --glass: rgba(226, 251, 255, 0.5);
+  --tile-radius: 0.4rem;
+  --hot: rgb(14, 30, 33);
+  --cold: rgb(14, 30, 33);
+  --skew: skew(0);
+  --padding: 0.5rem 0 0.5rem 0;
+  --current-temp-shadow: none;
+  --current-cond-shadow: none;
 }
