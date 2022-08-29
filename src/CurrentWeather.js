@@ -9,7 +9,9 @@ const CurrentWeather = ({ location, currentConditions, temps }) => {
   return (
     <Wrapper>
       <header className="location-temp">
-        <h2>{location.name}</h2>
+        <h2>
+          {location.name}, {location.state}
+        </h2>
         <p className="currently">
           <span className="current-temp">
             {temp}&#176;<span className="f">F</span>
@@ -49,15 +51,18 @@ const Wrapper = styled.div`
   }
 
   h2 {
+    text-align: center;
     text-shadow: 1px 2px 1px var(--shadow);
   }
 
   .currently {
+    display: flex;
+    justify-content: center;
     .current-temp {
       position: relative;
       font-size: 4rem;
       font-weight: 700;
-      text-shadow: 1px 3px 1px var(--shadow);
+      text-shadow: 2px 4px 2px var(--shadow);
     }
   }
 
@@ -82,16 +87,19 @@ const Wrapper = styled.div`
     align-items: center;
     justify-content: center;
     width: 11rem;
+    transform: var(--transform-icon);
     box-shadow: var(--current-cond-shadow);
-    transition: border-radius 0.2s, background-color 0.4s, box-shadow 0.4s;
-    0.4 img {
+    transition: border-radius 0.6s, transform 0.6s, background-color 0.6s,
+      box-shadow 0.6s;
+    img {
       transform: scale(1.2);
-      transition: filter 0.4s;
+      transition: filter 0.6s;
       filter: drop-shadow(1px 3px 1px var(--background));
     }
     p {
       font-size: 1.2rem;
       text-align: center;
+      color: var(--background);
     }
   }
 
@@ -106,9 +114,8 @@ const Wrapper = styled.div`
       display: flex;
       justify-content: space-between;
       box-shadow: var(--current-temp-shadow);
-      transition: background-color 0.4s, transform 0.4s, padding 0.4s,
-        box-shadow 1s;
-      transform: var(--skew);
+      transition: background-color 1s, transform 1s, padding 1s, box-shadow 1s;
+      transform: var(--transform-hi-lo);
       &:nth-of-type(1) {
         background-color: var(--hot);
         margin: 0.5rem 0;

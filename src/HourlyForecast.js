@@ -48,14 +48,17 @@ const HourlyForecast = ({ weatherForecast }) => {
         const { formattedTime, chance_of_rain, icon, text, formattedTemp } =
           hour;
         return (
-          <article key={index}>
-            <p>{formattedTime}</p>
-            <p>{formattedTemp}&#176;F</p>
-            <p>{chance_of_rain}%</p>
-            <div className="img-wrapper">
-              <img src={icon} alt={text} />
-            </div>
-          </article>
+          <div key={index}>
+            {formattedTime === "12am" && <div className="dayDivider"></div>}
+            <article>
+              <p>{formattedTime}</p>
+              <p>{formattedTemp}&#176;F</p>
+              <p>{chance_of_rain}%</p>
+              <div className="img-wrapper">
+                <img src={icon} alt={text} />
+              </div>
+            </article>
+          </div>
         );
       })}
     </Wrapper>
@@ -83,6 +86,12 @@ const Wrapper = styled.div`
         height: 100%;
       }
     }
+  }
+  .dayDivider {
+    width: 14rem;
+    height: 0.35rem;
+    margin: 1.4rem 2rem;
+    background-color: var(--text);
   }
 `;
 

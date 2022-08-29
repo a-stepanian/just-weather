@@ -11,6 +11,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [cityInput, setCityInput] = useState("Port Angeles");
   const [stateInput, setStateInput] = useState("WA");
+  // const [locations, setLocations] = useState([]);
   const [location, setLocation] = useState({});
   const [currentConditions, setCurrentConditions] = useState({});
   const [weatherForecast, setWeatherForecast] = useState([]);
@@ -28,6 +29,7 @@ function App() {
           }`
         );
       } else {
+        // setLocations(data);
         const { lat, lon, name, state } = data[0];
         const stateCode = stateInput.toUpperCase();
         setLocation({ lat, lon, name, state, stateCode });
@@ -203,7 +205,7 @@ const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
   background-color: var(--background);
-  transition: background-color 0.5s;
+  transition: background-color 1s;
 `;
 
 export default App;

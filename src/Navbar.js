@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+// import Locations from "./Locations";
 
 const Navbar = ({
   handleChange,
@@ -25,7 +26,8 @@ const Navbar = ({
           onChange={(e) => handleChange(e)}
         />
         <button className="search-btn" type="submit">
-          &#128269;
+          <div className="magnifying-glass-circle"></div>
+          <div className="magnifying-glass-handle"></div>
         </button>
       </form>
       <button type="button" className="darkmode-btn" onClick={toggleMode}>
@@ -40,6 +42,7 @@ const Navbar = ({
           light mode &#9728;&#65039;
         </span>
       </button>
+      {/* <Locations /> */}
     </Wrapper>
   );
 };
@@ -49,7 +52,7 @@ const Wrapper = styled.div`
   width: 100%;
   height: 3rem;
   padding: 0.1rem 0.2rem;
-  background-color: rgba(155, 155, 255, 0.5);
+  background-color: var(--navbar);
 
   display: flex;
   justify-content: space-between;
@@ -70,12 +73,11 @@ const Wrapper = styled.div`
       -webkit-appearance: none;
       -moz-appearance: none;
       appearance: none;
-      width: 10rem;
+      width: calc(100vw - 160px);
       height: 2rem;
-      background-color: transparent;
       border: none;
       border-radius: 0;
-      border-bottom: 0.1rem solid var(--text);
+      border-bottom: 3px solid var(--text);
       background-color: transparent;
       &:focus {
         outline: none;
@@ -86,10 +88,32 @@ const Wrapper = styled.div`
       right: 0rem;
       background-color: transparent;
       border: none;
+      width: 1.8rem;
+      height: 1.8rem;
+      &:hover {
+        cursor: pointer;
+      }
+      .magnifying-glass-circle {
+        position: absolute;
+        top: 0.2rem;
+        right: 0.2rem;
+        width: 1rem;
+        height: 1rem;
+        border: 3px solid var(--text);
+        border-radius: 50%;
+      }
+      .magnifying-glass-handle {
+        position: absolute;
+        top: 1.1rem;
+        right: 0.9rem;
+        width: 0.6rem;
+        border-bottom: 3px solid var(--text);
+        transform: rotate(-45deg);
+      }
     }
   }
   .darkmode-btn {
-    padding-rightt: 0.5rem;
+    padding-right: 0.5rem;
     position: relative;
     width: 3.3rem;
     height: 2.6rem;
@@ -111,6 +135,12 @@ const Wrapper = styled.div`
     }
     &:hover {
       cursor: pointer;
+    }
+  }
+
+  @media (min-width: 480px) {
+    form > input {
+      width: 18rem;
     }
   }
 `;
