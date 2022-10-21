@@ -1,10 +1,14 @@
-import React from "react";
 import styled from "styled-components";
+import { SingleDayForecast } from "./interfaces";
 
-const HourlyForecast = ({ weatherForecast }) => {
+type Props = {
+  weatherForecast: SingleDayForecast[];
+};
+
+const HourlyForecast = ({ weatherForecast }: Props): JSX.Element => {
   const currentTime = new Date().getHours();
 
-  const formatTime = (time) => {
+  const formatTime = (time: number): string => {
     // Make formattedTime variable 12hr am/pm format
     if (time > 0 && time < 12) {
       return time.toString() + "am";

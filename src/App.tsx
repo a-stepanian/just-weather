@@ -1,20 +1,44 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import CurrentWeather from "./CurrentWeather";
 import Navbar from "./Navbar";
 import HourlyForecast from "./HourlyForecast";
+import { SingleDayForecast, Location, CurrentConditions } from "./interfaces";
 
-function App() {
+export const App = () => {
   // used to prevent first weather fetching useEffect from running on first render
-  const [isFirstRender, setIsFirstRender] = useState(true);
-  const [isLightMode, setIsLightMode] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const [cityInput, setCityInput] = useState("Port Angeles");
-  const [stateInput, setStateInput] = useState("WA");
+  const [isFirstRender, setIsFirstRender] = useState<boolean>(true);
+  const [isLightMode, setIsLightMode] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [cityInput, setCityInput] = useState<string>("Port Angeles");
+  const [stateInput, setStateInput] = useState<string>("WA");
   // const [locations, setLocations] = useState([]);
-  const [location, setLocation] = useState({});
-  const [currentConditions, setCurrentConditions] = useState({});
-  const [weatherForecast, setWeatherForecast] = useState([]);
+  const [location, setLocation] = useState<Location>({
+    lat: 0,
+    lon: 0,
+    name: "",
+    state: "",
+    stateCode: "",
+  });
+  const [currentConditions, setCurrentConditions] = useState<CurrentConditions>(
+    {
+      temp_f: 0,
+      wind_mph: 0,
+      wind_degree: 0,
+      wind_dir: "",
+      pressure_in: 0,
+      precip_in: 0,
+      humidity: 0,
+      cloud: 0,
+      feelslike_f: 0,
+      uv: 0,
+      text: "",
+      icon: "",
+    }
+  );
+  const [weatherForecast, setWeatherForecast] = useState<SingleDayForecast[]>(
+    []
+  );
 
   const fetchLocation = async () => {
     try {
@@ -138,7 +162,7 @@ function App() {
   };
 
   // handle form input change event
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.value.includes(",")) {
       const index = e.target.value.indexOf(",");
       setStateInput(
@@ -151,7 +175,7 @@ function App() {
   };
 
   // handle form submission event
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     await fetchLocation();
     await fetchWeatherData();
@@ -176,7 +200,6 @@ function App() {
       <Navbar
         handleChange={handleChange}
         handleSubmit={handleSubmit}
-        location={location}
         isLightMode={isLightMode}
         setIsLightMode={setIsLightMode}
       />
@@ -197,7 +220,7 @@ function App() {
       )}
     </Wrapper>
   );
-}
+};
 
 const Wrapper = styled.div`
   position: relative;
@@ -207,5 +230,3 @@ const Wrapper = styled.div`
   background-color: var(--background);
   transition: background-color 1s;
 `;
-
-export default App;

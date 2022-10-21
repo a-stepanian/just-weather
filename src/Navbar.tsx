@@ -2,35 +2,43 @@ import React from "react";
 import styled from "styled-components";
 // import Locations from "./Locations";
 
+type Props = {
+  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+  isLightMode: boolean;
+  setIsLightMode: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
 const Navbar = ({
   handleChange,
   handleSubmit,
   isLightMode,
   setIsLightMode,
-}) => {
-  const toggleMode = () => {
-    setIsLightMode((current) => !current);
-  };
+}: Props): JSX.Element => {
   return (
     <Wrapper>
       <h1>
         just the
         <br /> weather
       </h1>
-      <form onSubmit={(e) => handleSubmit(e)}>
+      <form onSubmit={handleSubmit}>
         <label htmlFor="location"></label>
         <input
           type="text"
           name="location"
           id="location"
-          onChange={(e) => handleChange(e)}
+          onChange={handleChange}
         />
         <button className="search-btn" type="submit">
           <div className="magnifying-glass-circle"></div>
           <div className="magnifying-glass-handle"></div>
         </button>
       </form>
-      <button type="button" className="darkmode-btn" onClick={toggleMode}>
+      <button
+        type="button"
+        className="darkmode-btn"
+        onClick={() => setIsLightMode((current) => !current)}
+      >
         <span
           className={`${isLightMode ? "btn-text" : "btn-text btn-text-light"}`}
         >

@@ -1,11 +1,27 @@
-import React from "react";
 import styled from "styled-components";
+import { Location, CurrentConditions } from "./interfaces";
 
-const CurrentWeather = ({ location, currentConditions, temps }) => {
+interface Temps {
+  max: number;
+  min: number;
+}
+
+type Props = {
+  location: Location;
+  currentConditions: CurrentConditions;
+  temps: Temps;
+};
+
+const CurrentWeather = ({
+  location,
+  currentConditions,
+  temps,
+}: Props): JSX.Element => {
   const { icon, temp_f, text } = currentConditions;
   const temp = temp_f.toFixed(0);
   const min = temps.min.toFixed(0);
   const max = temps.max.toFixed(0);
+
   return (
     <Wrapper>
       <header className="location-temp">
